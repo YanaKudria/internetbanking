@@ -14,6 +14,11 @@ import java.util.concurrent.TimeUnit;
 
 public class DemoTest {
 
+    HomePage homePage = new HomePage();
+    MessagePage messagePage = new MessagePage();
+    CurrencyPage currencyPage = new CurrencyPage();
+    AccountsPage accountsPage = new AccountsPage();
+
 
     @BeforeMethod
     public void BeforeEachTest(){
@@ -23,30 +28,29 @@ public class DemoTest {
     @Test
     public void successDemoLoginTest() {
         SiteNavigator.openMainDemoPage().submitFormWithCredentials("demo", "demo");
-        Assert.assertTrue(HomePage.getUserName().equals("Королёва Ольга"));
+        Assert.assertTrue(homePage.getUserName().equals("Королёва Ольга"));
 }
 
     @Test
     public void makeSureThatBalanceIsPositive(){
         SiteNavigator.openMainDemoPage().submitFormWithCredentials("demo", "demo");
-        HomePage.openAccountPage();
-        Assert.assertTrue(AccountsPage.makeSureThatBalanceIsPositive() > 0);
+        homePage.openAccountPage();
+        Assert.assertTrue(accountsPage.makeSureThatBalanceIsPositive() > 0);
     }
 
     @Test
     public void checkIfTheMessageWasSent(){
         SiteNavigator.openMainDemoPage().submitFormWithCredentials("demo", "demo");
-        HomePage.clickMassageIcon();
-        MessagePage.sendNewMessage("How do I get an official account statement?");
-        MessagePage.openLastSentMessage();
-        Assert.assertTrue(MessagePage.getMessageOfLastMessage().contains("How do I get an official account statement?"));
+        homePage.clickMassageIcon();
+        messagePage.sendNewMessage("How do I get an official account statement?");
+        messagePage.openLastSentMessage();
+        Assert.assertTrue(messagePage.getMessageOfLastMessage().contains("How do I get an official account statement?"));
     }
 
     @Test
     public void makeSureCurrencyExchangeWasSuccessful(){
-        CurrencyPage currencyPage = new CurrencyPage();
         SiteNavigator.openMainDemoPage().submitFormWithCredentials("demo", "demo");
-        HomePage.openExchangePage();
+        homePage.openExchangePage();
         currencyPage.makeExchange(currencyPage.USD, currencyPage.RUB, "100");
         Assert.assertTrue(currencyPage.successExchangeMessageIsPresent());
 
@@ -55,10 +59,10 @@ public class DemoTest {
     @Test(dataProvider = "getDataFromCSV", dataProviderClass = DataProviderClass.class)
     public void sendingFewMessages(String Message){
         SiteNavigator.openMainDemoPage().submitFormWithCredentials("demo", "demo");
-        HomePage.clickMassageIcon();
-        MessagePage.sendNewMessage(Message);
-        MessagePage.openLastSentMessage();
-        Assert.assertTrue(MessagePage.getMessageOfLastMessage().contains(Message));
+        homePage.clickMassageIcon();
+        messagePage.sendNewMessage(Message);
+        messagePage.openLastSentMessage();
+        Assert.assertTrue(messagePage.getMessageOfLastMessage().contains(Message));
 
     }
 
